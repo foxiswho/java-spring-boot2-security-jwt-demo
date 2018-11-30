@@ -5,6 +5,8 @@ import com.foxwho.demo.consts.JwtConsts;
 import com.foxwho.demo.model.JwtUser;
 import com.foxwho.demo.model.User;
 import com.foxwho.demo.util.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +25,7 @@ import java.util.*;
  * 验证用户名密码正确后，生成一个token，并将token返回给客户端
  */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
+    private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     private AuthenticationManager authenticationManager;
 
@@ -87,9 +89,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             for (GrantedAuthority grantedAuthority : authorities) {
                 roleList.add(grantedAuthority.getAuthority());
             }
+            System.out.println("jwtUser.getUsername()="+jwtUser.getUsername());
             token = JwtUtils.createToken(jwtUser.getUsername(), roleList, false);
+
+//            System.out.println(JwtUtils.getTokenBody(token));
+//            logger.info("JwtUtils.getTokenBody:{}", JwtUtils.getTokenBody(token));
+            String str= JwtConsts.HEADER_AUTHORIZATION_PREFIX + token;
+            logger.info("token:{}", str);
             // 登录成功后，返回token到header里面
-            response.addHeader(JwtConsts.HEADER_AUTHORIZATION_NAME, JwtConsts.HEADER_AUTHORIZATION_PREFIX + token);
+            response.addHeader(JwtConsts.HEADER_AUTHORIZATION_NAME, str);
         } catch (Exception e) {
             e.printStackTrace();
         }

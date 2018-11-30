@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.List;
  * JWT
  */
 public class JwtUtils {
-    private static final String ISS = "fox";
+    private static final String ISS = "fox.who";
 
     /**
      * 角色的key
@@ -48,16 +49,20 @@ public class JwtUtils {
         //30天
         calendar.add(Calendar.DAY_OF_MONTH, 30);
         Date time = calendar.getTime();
+        System.out.println("username:" + username);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        System.out.println("time:" + sdf.format(calendar.getTime()));
         return Jwts.builder()
-                .setSubject(username)
+                //采用什么算法是可以自己选择的，不一定非要采用HS512
+                .signWith(SignatureAlgorithm.HS512, JwtConsts.SIGNING_KEY)
                 .setClaims(map)
                 .setIssuer(ISS)
+                .setSubject(username)
+                .setId(username)
                 .setIssuedAt(new Date())
                 // 设置过期时间30天
                 .setExpiration(time)
-                //采用什么算法是可以自己选择的，不一定非要采用HS512
-                .signWith(SignatureAlgorithm.HS512, JwtConsts.SIGNING_KEY)
                 .compact();
     }
 

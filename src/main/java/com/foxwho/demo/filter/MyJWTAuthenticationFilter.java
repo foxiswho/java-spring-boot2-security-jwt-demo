@@ -61,9 +61,14 @@ public class MyJWTAuthenticationFilter extends BasicAuthenticationFilter {
         if (token == null || token.isEmpty()) {
             throw new HttpAesException("Token为空");
         }
+        token = token.replace(JwtConsts.HEADER_AUTHORIZATION_PREFIX, "");
+        token = token.trim();
         String username = null;
         try {
+            logger.info("token:{}", token);
+//            System.out.println(JwtUtils.getTokenBody(token));
             username = JwtUtils.getUsername(token);
+            logger.info("username: {}", username);
             long end = System.currentTimeMillis();
             logger.info("执行时间: {}", (end - start) + " 毫秒");
             if (username != null) {

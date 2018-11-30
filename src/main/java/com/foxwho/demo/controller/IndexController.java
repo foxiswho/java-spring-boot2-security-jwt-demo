@@ -19,6 +19,10 @@ import java.util.Map;
 @RequestMapping("/index")
 @Api(value = "用户管理", description = "用户管理")
 public class IndexController extends BaseController {
+    @GetMapping
+    public String index(){
+        return "列表";
+    }
     /**
      * 获取用户列表
      *

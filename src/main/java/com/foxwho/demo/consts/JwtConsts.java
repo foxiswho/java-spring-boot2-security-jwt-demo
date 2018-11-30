@@ -4,7 +4,7 @@ public class JwtConsts {
     /**
      * 签名key
      */
-    public static final String SIGNING_KEY = "sign";
+    public static final String SIGNING_KEY = "sign.fox";
     /**
      * 统一header 名
      */
