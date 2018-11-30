@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * @author zhaoxinguo on 2017/9/13.
+ * 
  */
 @Entity
 @Data
